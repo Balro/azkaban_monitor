@@ -289,7 +289,7 @@ public class AZKBMonitor {
             List<SendEvent> ses = new LinkedList<>();
             PreparedStatement ps = jdbc.getConn().prepareStatement(
                     "select count(*) from execution_jobs " +
-                            "where end_time > ? and job_id = ? and status in (50)");
+                            "where end_time > ? and job_id = ? and status in (50,60,70)");
             ps.setLong(1, midnightTimeStamp());
             ps.setString(2, job);
             ResultSet rs = ps.executeQuery();
