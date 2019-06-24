@@ -245,7 +245,7 @@ public class AZKBMonitor {
             List<SendEvent> ses = new LinkedList<>();
             PreparedStatement ps = jdbc.getConn().prepareStatement(
                     "select count(*) from execution_flows " +
-                            "where end_time > ? and flow_id = ? and status = 50");
+                            "where end_time > ? and flow_id = ? and status in (50,60,70)");
             ps.setLong(1, midnightTimeStamp());
             ps.setString(2, flow);
             ResultSet rs = ps.executeQuery();
