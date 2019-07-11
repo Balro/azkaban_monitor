@@ -1,4 +1,4 @@
-package demo.baluo.monitor.sender;
+package baluo.monitor.azkaban.sender;
 
 public class SendEvent {
     public String id;

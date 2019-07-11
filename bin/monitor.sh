@@ -1,24 +1,29 @@
 #!/bin/bash
 . /etc/profile
 . ~/.bash_profile
-BIN=`dirname $0`
-BIN=`cd -P $BIN/../;pwd`
 
+HOME=`dirname $0`
+HOME=`cd -P $HOME/../;pwd`
+
+# log dir
+export LOG_DIR=$HOME/logs
+
+# jvm opts
 MONITOR_OPTS="-Xmx256m"
 
 zkcli="/opt/cloudera/parcels/CDH/lib/zookeeper/bin/zkCli.sh -server bigdata01:2181"
 
-for f in $(find $BIN/lib -type f); do
+# classpath
+CLASSPATH=
+for f in $(find $HOME/lib -type f); do
   if [ "$CLASSPATH" ]; then
     CLASSPATH=$CLASSPATH:$f
   else
     CLASSPATH=$f
   fi
 done
-
-CLASSPATH=$CLASSPATH:$BIN/conf
-
-log=$BIN/logs/monitor.out
+CLASSPATH=$CLASSPATH:$HOME/lib
+CLASSPATH=$CLASSPATH:$HOME/conf
 
 start() {
   is_run=`$zkcli get /baluo/monitor/azkb/heartbeat 2>&1 | grep "Node does not exist" | wc -l`
@@ -27,7 +32,7 @@ start() {
     status
     exit 1
   fi
-  nohup java $MONITOR_OPTS -cp $CLASSPATH demo.baluo.monitor.app.AZKBMonitor >> $log 2>&1 &
+  nohup java $MONITOR_OPTS -cp $CLASSPATH baluo.monitor.azkaban.AzkabanBMonitor >> $LOG_DIR/start.out 2>&1 &
 }
 
 stop() {
@@ -50,6 +55,10 @@ case $1 in
   status)
     status
   ;;
+  restart)
+    stop
+    start
+   ;;
   *)
     echo "$USAGE"
   ;;

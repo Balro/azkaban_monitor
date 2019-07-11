@@ -1,4 +1,4 @@
-package demo.baluo.monitor.zookeeper;
+package baluo.monitor.azkaban.zookeeper;
 
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.*;

@@ -1,6 +1,6 @@
-package demo.baluo.monitor.heartbeat;
+package baluo.monitor.azkaban.heartbeater;
 
-import demo.baluo.monitor.zookeeper.ZKUtil;
+import baluo.monitor.azkaban.zookeeper.ZKUtil;
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
@@ -15,7 +15,6 @@ import java.util.Properties;
  */
 public class HeartBeater extends Thread {
     private static final Logger LOG = Logger.getLogger(HeartBeater.class);
-    private boolean running = true;
     private InetAddress addr;
     private String hbPath;
     private ZKUtil zk;
@@ -45,9 +44,16 @@ public class HeartBeater extends Thread {
 
     @Override
     public void run() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                zk.delete(hbPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }));
         int maxRetry = Integer.parseInt(prop.getProperty("zookeeper.maxretry"));
         int hasRetry = 0;
-        while (running) {
+        while (true) {
             try {
                 sleep(hbInterval);
                 zk.setData(hbPath, addr.getHostName() + "(" + addr.getHostAddress() + ") " + ", monitor time: " + new Date());
@@ -77,8 +83,14 @@ public class HeartBeater extends Thread {
                 nne.printStackTrace();
                 LOG.fatal("Heart beat failed, node [" + hbPath + "] does not exist!");
                 System.exit(1);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    zk.delete(hbPath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

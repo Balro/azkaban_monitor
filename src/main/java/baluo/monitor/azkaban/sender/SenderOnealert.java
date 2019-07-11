@@ -1,4 +1,4 @@
-package demo.baluo.monitor.sender;
+package baluo.monitor.azkaban.sender;
 
 import org.apache.log4j.Logger;
 import org.json.JSONObject;

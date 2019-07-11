@@ -1,11 +1,11 @@
-package demo.baluo.monitor.app;
+package baluo.monitor.azkaban;
 
-import demo.baluo.monitor.heartbeat.HeartBeater;
-import demo.baluo.monitor.jdbc.JDBCUtil;
-import demo.baluo.monitor.sender.SendEvent;
-import demo.baluo.monitor.sender.Sender;
-import demo.baluo.monitor.sender.SenderOnealert;
-import demo.baluo.monitor.zookeeper.ZKUtil;
+import baluo.monitor.azkaban.heartbeater.HeartBeater;
+import baluo.monitor.azkaban.jdbc.JDBCUtil;
+import baluo.monitor.azkaban.sender.SendEvent;
+import baluo.monitor.azkaban.sender.Sender;
+import baluo.monitor.azkaban.sender.SenderOnealert;
+import baluo.monitor.azkaban.zookeeper.ZKUtil;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -19,14 +19,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-public class AZKBMonitor {
-    private static final Logger LOG = Logger.getLogger(AZKBMonitor.class);
+public class AzkabanMonitor {
+    private static final Logger LOG = Logger.getLogger(AzkabanMonitor.class);
     private static Properties prop;
     private ZKUtil zk;
     private JDBCUtil jdbc;
 
     public static void main(String[] args) throws Exception {
-        AZKBMonitor app = new AZKBMonitor();
+        AzkabanMonitor app = new AzkabanMonitor();
         app.init();
         app.start();
     }
@@ -41,7 +41,7 @@ public class AZKBMonitor {
         prop.load(this.getClass().getClassLoader().getResourceAsStream("monitor.properties"));
         zk = new ZKUtil(prop).init("azkb");
         jdbc = new JDBCUtil(prop).init("azkb");
-        LOG.info("AZKBMonitor initiallized.");
+        LOG.info("AzkabanMonitor initiallized.");
     }
 
     private class JobChecker extends Thread {

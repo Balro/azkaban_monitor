@@ -1,4 +1,4 @@
-package demo.baluo.monitor.jdbc;
+package baluo.monitor.azkaban.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
