@@ -1,5 +1,6 @@
-package baluo.monitor.azkaban.sender;
+package balro.monitor.azkaban.del;
 
+import balro.monitor.azkaban.sender.SenderEvent;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
@@ -25,17 +26,17 @@ public class SenderOnealert extends Sender {
     }
 
     @Override
-    public void send(SendEvent se) {
-        LOG.info("Send event: " + se);
-        try {
-            if (postJson(getJsonObj(se))) {
-                LOG.info("Send event succeed: " + se);
-            } else {
-                LOG.error("Send event failed: " + se);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void send(SenderEvent se) {
+//        LOG.info("Send event: " + se);
+//        try {
+//            if (postJson(getJsonObj(se))) {
+//                LOG.info("Send event succeed: " + se);
+//            } else {
+//                LOG.error("Send event failed: " + se);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private boolean postJson(JSONObject jObj) throws Exception {
@@ -106,16 +107,16 @@ public class SenderOnealert extends Sender {
      * @param es
      * @return
      */
-    private JSONObject getJsonObj(SendEvent es) {
-        JSONObject jObj = new JSONObject();
-        jObj.put("app", app);
-        jObj.put("eventType", "trigger");
-        jObj.put("alarmName", es.title);
-        jObj.put("eventId", es.id);
-        jObj.put("alarmContent", es.msg);
-        jObj.put("priority", 2);
-        jObj.put("details", new JSONObject("{detail:" + es.detail + "}"));
-        return jObj;
-    }
+//    private JSONObject getJsonObj(SenderEvent es) {
+//        JSONObject jObj = new JSONObject();
+//        jObj.put("app", app);
+//        jObj.put("eventType", "trigger");
+//        jObj.put("alarmName", es.title);
+//        jObj.put("eventId", es.id);
+//        jObj.put("alarmContent", es.msg);
+//        jObj.put("priority", 2);
+//        jObj.put("details", new JSONObject("{detail:" + es.detail + "}"));
+//        return jObj;
+//    }
 
 }

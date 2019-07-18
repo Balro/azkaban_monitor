@@ -1,5 +1,6 @@
-package baluo.monitor.azkaban.sender;
+package balro.monitor.azkaban.del;
 
+import balro.monitor.azkaban.sender.SenderEvent;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -14,10 +15,10 @@ public abstract class Sender {
     // 周/月/日/时。
     private List<List<Integer>> workTime = new ArrayList<>();
 
-    public void send(List<SendEvent> ses) {
+    public void send(List<SenderEvent> ses) {
         if (ses == null)
             return;
-        for (SendEvent se : ses) {
+        for (SenderEvent se : ses) {
             send(se);
         }
     }
@@ -25,7 +26,7 @@ public abstract class Sender {
     // TODO
     public abstract boolean getAck();
 
-    public abstract void send(SendEvent se);
+    public abstract void send(SenderEvent se);
 
     public boolean checkActive() {
         cal.setTimeInMillis(System.currentTimeMillis());

@@ -1,4 +1,5 @@
-import baluo.monitor.azkaban.util.ZKUtil;
+package balro.monitor.azkaban.util;
+
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.ZooDefs;
@@ -34,6 +35,31 @@ public class ZKUtilTest {
         ZKUtil.delete(zoo, node);
         stat = zoo.exists(node, false);
         Assert.assertNull(stat);
+        zoo.close();
+    }
+
+    @Test
+    public void existTest() throws Exception {
+        zoo = newZoo();
+        zoo.create(node, "hello".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+        Assert.assertTrue(ZKUtil.exist(zoo, node));
+        zoo.close();
+    }
+
+    @Test
+    public void getTest() throws Exception {
+        zoo = newZoo();
+        zoo.create(node, "hello".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+        Assert.assertEquals("hello", ZKUtil.get(zoo, node));
+        zoo.close();
+    }
+
+    @Test
+    public void setTest() throws Exception {
+        zoo = newZoo();
+        zoo.create(node, "hello".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+        ZKUtil.set(zoo, node, "world");
+        Assert.assertArrayEquals("world".getBytes(), (zoo.getData(node, ZKUtil.EMPTY_WATCHER, null)));
         zoo.close();
     }
 

@@ -1,9 +1,9 @@
 //package baluo.monitor.azkaban;
 //
 //import baluo.monitor.azkaban.jdbc.JDBCUtil;
-//import baluo.monitor.azkaban.sender.SenderEvent;
-//import baluo.monitor.azkaban.sender.Sender;
-//import baluo.monitor.azkaban.sender.SenderOnealert;
+//import SenderEvent;
+//import Sender;
+//import SenderOnealert;
 //import baluo.monitor.azkaban.zookeeper.ZKUtil;
 //import org.apache.log4j.Logger;
 //

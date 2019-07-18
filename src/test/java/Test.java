@@ -1,12 +1,19 @@
-import org.apache.zookeeper.CreateMode;
+import org.apache.commons.configuration.XMLConfiguration;
 
-import java.io.PrintStream;
-import java.util.Arrays;
+import static java.lang.System.out;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class Test {
-    private static PrintStream OUT = System.out;
-    public static void main(String[] args) {
-        String s = String.format("create %s, data %s, mode %s", "/root", "123", CreateMode.PERSISTENT);
-        System.out.println(s);
+
+    public static void main(String[] args) throws Exception {
+        ArrayList<Integer> a = new ArrayList<>();
+        a.add(1);
+        a.add(2);
+        a.add(3);
+        out.println(a.toString());
     }
 }

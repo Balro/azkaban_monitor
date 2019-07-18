@@ -1,10 +1,8 @@
-package baluo.monitor.azkaban.util;
+package balro.monitor.azkaban.util;
 
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
-
-import java.util.Arrays;
 
 public class ZKUtil {
     private static Logger LOG = Logger.getLogger(ZKUtil.class);
@@ -29,7 +27,7 @@ public class ZKUtil {
     }
 
     public static String get(ZooKeeper zoo, String path) throws KeeperException, InterruptedException {
-        return Arrays.toString(zoo.getData(path, false, null));
+        return new String(zoo.getData(path, false, null));
     }
 
     public static void set(ZooKeeper zoo, String path, String data) throws KeeperException, InterruptedException {

@@ -1,7 +1,6 @@
-package baluo.monitor.azkaban.util;
+package balro.monitor.azkaban.util;
 
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -10,7 +9,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HttpUtil {
-    private static final Logger LOG = Logger.getLogger(HttpUtil.class);
+    private static Logger LOG = Logger.getLogger(HttpUtil.class);
+
+    public static void setLog(Logger log) {
+        LOG = log;
+    }
 
     public static String post(String urlStr, String data) throws Exception {
         URL url = new URL(urlStr);
