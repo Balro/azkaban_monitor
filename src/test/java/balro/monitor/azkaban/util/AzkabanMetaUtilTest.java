@@ -6,8 +6,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Arrays;
 import java.util.List;
 
 public class AzkabanMetaUtilTest {
@@ -35,7 +37,7 @@ public class AzkabanMetaUtilTest {
 
     @Test
     public void checkJobStatusTest() throws Exception {
-        List<SenderEvent> list = AzkabanMetaUtil.checkJobStatus(CONN, 1563454010000l, 1563454030000l, 0, "70,80"
+        List<SenderEvent> list = AzkabanMetaUtil.checkJobStatus(CONN, 1563455278389L, 1563455308421L, 0, "70,80"
                 , "%", "%", "%");
 //        List<SenderEvent> list = AzkabanMetaUtil.checkJobStatus(CONN, 0L, Long.MAX_VALUE, 0, "50"
 //                , "test", "%hdw_user_product_order%", "%");
