@@ -2,23 +2,22 @@ package balro.monitor.azkaban.sender;
 
 public class SenderEvent extends BaseEvent {
     private String msg;
-    private String execId;
+    private long execId;
 
     public String getMsg() {
         return msg;
     }
 
-    public SenderEvent setMsg(String msg) {
+    public void setMsg(String msg) {
         this.msg = msg;
-        return this;
     }
 
 
-    public String getExecId() {
+    public long getExecId() {
         return execId;
     }
 
-    public SenderEvent setExecId(String execId) {
+    public SenderEvent setExecId(long execId) {
         this.execId = execId;
         return this;
     }

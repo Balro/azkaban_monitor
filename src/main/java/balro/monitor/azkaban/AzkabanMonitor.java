@@ -45,7 +45,9 @@ public class AzkabanMonitor {
     private static void start() {
         LOG.info("Azkaban monitor starting.");
         try {
-            conf = new XMLConfiguration("azkaban-monitor.xml");
+            conf = new XMLConfiguration();
+            conf.setDelimiterParsingDisabled(true);
+            conf.load("azkaban-monitor.xml");
             startDispacher();
             startSender();
             startChecker();

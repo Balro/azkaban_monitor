@@ -17,4 +17,8 @@ public class AzkabanMonitorTest {
         zk.close();
         TimeUnit.SECONDS.sleep(120);
     }
+
+    public static void main(String[] args) {
+        AzkabanMonitor.main(new String[]{"start"});
+    }
 }

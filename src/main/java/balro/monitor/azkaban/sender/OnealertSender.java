@@ -53,24 +53,24 @@ public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements 
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            LOG.debug(String.format("OnealertSender %s regularly check.", app));
+            LOG.debug(String.format("OnealertSender %s/%s regularly check.", name, app));
             try {
                 SenderEvent se;
-                while ((se = this.poll(interval, TimeUnit.SECONDS)) != null) {
+                while ((se = this.poll(interval, TimeUnit.MILLISECONDS)) != null) {
                     if (shouldSend()) {
                         send(se, 2);
-                        LOG.info(String.format("Found Event %s and send.", se));
+                        LOG.info(String.format("%s/%s found Event %s and send.", name, app, se));
                     } else {
-                        LOG.debug(String.format("Found Event %s but not in sendtime.", se));
+                        LOG.debug(String.format("%s/%s found Event %s but not in sendtime.", name, app, se));
                     }
                 }
             } catch (InterruptedException e) {
-                LOG.warn(String.format("OnealertSender %s interrupted.", app));
+                LOG.warn(String.format("OnealertSender %s/%s interrupted.", name, app));
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
         }
-        LOG.info(String.format("OnealertSender %s stopped.", app));
+        LOG.info(String.format("OnealertSender %s/%s stopped.", name, app));
     }
 
     private boolean shouldSend() {
@@ -99,21 +99,21 @@ public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements 
     private void send(SenderEvent se, int retry) {
         JSONObject data = new JSONObject();
         data.put("app", app);
-        data.put("eventId", String.format("%s/%s/%s", se.getExecId()));
+        data.put("eventId", String.format("%s/%s/%s/%s/%s", se.getExecId(), se.getProject(), se.getFlow(), se.getJob(), se.getAttempt()));
         data.put("eventType", "trigger");
-        data.put("alarmName", "testName");
+        data.put("alarmName", String.format("%s/%s/%s/%s/%s", se.getExecId(), se.getProject(), se.getFlow(), se.getJob(), se.getAttempt()));
         data.put("priority", 1);
-        data.put("alarmContent", "testContent");
+        data.put("alarmContent", se.getMsg());
 
         int retried = 0;
         while (retried <= retry) {
             try {
-                String res = HttpUtil.post(url, se.toString());
+                String res = HttpUtil.post(url, data.toString());
                 JSONObject json = new JSONObject(res);
                 if (json.getString("result").equals("success")) {
-                    LOG.error(String.format("OnealertSender %s send success. Event %s. Res %s", app, se.toString(), res));
+                    LOG.info(String.format("OnealertSender %s/%s send success. Event %s. Res %s", name, app, se.toString(), res));
                 } else {
-                    LOG.error(String.format("OnealertSender %s send event succ bug get failed return msg. Event %s. returnMsg %s", app, se.toString(), res));
+                    LOG.error(String.format("OnealertSender %s/%s send event succ bug get failed return msg. Event %s. returnMsg %s", name, app, se.toString(), res));
                 }
 
                 return;

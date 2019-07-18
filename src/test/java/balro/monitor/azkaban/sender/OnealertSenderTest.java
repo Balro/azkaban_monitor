@@ -20,6 +20,8 @@ public class OnealertSenderTest {
         new Thread(os).start();
         TimeUnit.SECONDS.sleep(5);
         SenderEvent se = new SenderEvent();
+        se.setExecId(1);
+        se.setMsg("hello");
         System.out.println("Offer a event.");
         os.offer(se);
         TimeUnit.SECONDS.sleep(5);

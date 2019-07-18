@@ -9,6 +9,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +75,9 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> 
                         LOG.debug(String.format("JobStatusChecker run time range [%s, %s], found %d events.",
                                 lastCheckTime, currentCheckTime, list.size()));
                         for (SenderEvent se : list) {
+                            se.setMsg(String.format("Job in status, execId=%d, project=%s, flow=%s, job=%s, attempt=%d, status=%s, start=%s, end=%s."
+                                    , se.getExecId(), se.getProject(), se.getFlow(), se.getJob(), se.getAttempt(), se.getStatus()
+                                    , new Date(se.getStartTime()), new Date(se.getEndTime())));
                             while (!queue.offer(se, interval, TimeUnit.MILLISECONDS)) {
                                 LOG.warn(String.format("SenderEvent offer to dispacher failed, retry... %s", se));
                             }

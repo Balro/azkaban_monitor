@@ -44,10 +44,12 @@ public class AzkabanMetaUtil {
         ps.setString(5, project);
         ps.setString(6, flow);
         ps.setString(7, job);
+        LOG.debug("CheckJobStatus sql: " + ps.toString().substring(ps.toString().lastIndexOf(":") + 1).trim());
+
         ResultSet rs = ps.executeQuery();
         List<SenderEvent> seList = new ArrayList<>();
         while (rs.next()) {
-            seList.add((SenderEvent) new SenderEvent().setExecId(rs.getString(1))
+            seList.add((SenderEvent) new SenderEvent().setExecId(rs.getLong(1))
                     .setProject(rs.getString(2))
                     .setFlow(rs.getString(3))
                     .setJob(rs.getString(4))
