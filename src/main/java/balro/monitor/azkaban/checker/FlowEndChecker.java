@@ -65,7 +65,7 @@ public class FlowEndChecker extends ArrayList<FlowEndChecker.FlowEndCheckEvent> 
             for (FlowEndCheckEvent ce : this) {
                 if (ce.shouldCheck(lastCheckTime, currentCheckTime)) {
                     try {
-                        boolean ended = AzkabanMetaUtil.hasFlowEnded(bds.getConnection(), ce.getProject(), ce.getProject());
+                        boolean ended = AzkabanMetaUtil.hasFlowEnded(bds.getConnection(), ce.getProject(), ce.getFlow());
                         LOG.debug(String.format("FlowEndChecker run time range [%s, %s], event %s, run=%b",
                                 lastCheckTime, currentCheckTime, ce.toString(), ended));
                         if (!ended) {
@@ -80,12 +80,11 @@ public class FlowEndChecker extends ArrayList<FlowEndChecker.FlowEndCheckEvent> 
                             }
                             LOG.info(String.format("Offer event to dispacher succ: %s", se));
                         }
-                    } catch (InterruptedException e) {
-                        LOG.warn("FlowEndChecker interrupted.");
-                        e.printStackTrace();
+                    } catch (InterruptedException ie) {
+                        LOG.warn("FlowEndChecker interrupted.", ie);
                         Thread.currentThread().interrupt();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOG.warn(e);
                     }
                 }
             }
@@ -93,8 +92,7 @@ public class FlowEndChecker extends ArrayList<FlowEndChecker.FlowEndCheckEvent> 
             try {
                 TimeUnit.MILLISECONDS.sleep(interval);
             } catch (InterruptedException e) {
-                LOG.warn("FlowEndChecker interrupted.");
-                e.printStackTrace();
+                LOG.warn("FlowEndChecker interrupted.", e);
                 Thread.currentThread().interrupt();
             }
         }

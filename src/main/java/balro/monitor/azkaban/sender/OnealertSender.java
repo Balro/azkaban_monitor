@@ -65,8 +65,7 @@ public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements 
                     }
                 }
             } catch (InterruptedException e) {
-                LOG.warn(String.format("OnealertSender %s/%s interrupted.", name, app));
-                e.printStackTrace();
+                LOG.warn(String.format("OnealertSender %s/%s interrupted.", name, app), e);
                 Thread.currentThread().interrupt();
             }
         }
@@ -117,13 +116,13 @@ public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements 
                 }
 
                 return;
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception e) {
+                LOG.warn(null, e);
                 try {
                     TimeUnit.MILLISECONDS.sleep(interval);
                     LOG.warn(String.format("OnealertSender %s send event failed, try resend after 10 sec. event %s", app, se.toString()));
                 } catch (InterruptedException ie) {
-                    ie.printStackTrace();
+                    LOG.warn(null, ie);
                     Thread.currentThread().interrupt();
                 }
             }

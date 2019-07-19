@@ -54,60 +54,34 @@
             <status>70,80</status>
             <attempt>1</attempt>
         </allfailed>
-        <end>
-            <project>days</project>
-            <flow>end</flow>
-            <starttime>01:00</starttime>
-            <endtime>05:30</endtime>
-        </end>
-        <hdw_user_new_device>
-            <project>days</project>
-            <flow>%hdw_new_device_flow%</flow>
-            <job>hdw_user_new_device</job>
-            <endtime>02:30</endtime>
-        </hdw_user_new_device>
-        <hdw_user_product_order>
-            <project>days</project>
-            <flow>%hdw_user_product_order_flow%</flow>
-            <job>hdw_user_product_order</job>
-            <endtime>02:50</endtime>
-        </hdw_user_product_order>
-        <hdw_user_new_active>
-            <project>days</project>
-            <flow>job</flow>
-            <job>hdw_user_new_active</job>
-            <endtime>03:00</endtime>
-        </hdw_user_new_active>
         <job1>
             <project>test</project>
             <flow>ttt</flow>
-            <job>321</job>
-            <starttime>15:20</starttime>
-            <endtime>15:20</endtime>
+            <starttime>17:28</starttime>
+            <endtime>17:28</endtime>
         </job1>
         <job2>
             <project>test</project>
-            <flow>ttt</flow>
-            <job>123</job>
-            <starttime>15:20</starttime>
-            <endtime>15:20</endtime>
+            <flow>tt2</flow>
+            <starttime>17:28</starttime>
+            <endtime>17:28</endtime>
         </job2>
     </conditions>
     <senders>
-        <qinghe>
-            <app>c057ef89-2aeb-3091-1c0a-fc51776a9aab</app>
+        <sa>
+            <app>ccc</app>
             <week>2,4,6,7</week>
             <hour>0-6</hour>
-        </qinghe>
-        <moyu>
-            <app>d31a87e5-378d-fceb-68f3-f7a7bd38f9c1</app>
+        </sa>
+        <sb>
+            <app>cba</app>
             <week>1,3,5</week>
             <hour>0-6</hour>
-        </moyu>
-        <test>
-            <app>abdc623d-c3e3-a908-05d5-a5e0cfca62d3</app>
+        </sb>
+        <sc>
+            <app>abc</app>
             <week>1,3,4,5</week>
             <hour>0-23</hour>
-        </test>
+        </sc>
     </senders>
 </configuration>

@@ -12,7 +12,7 @@ public class HttpUtilTest {
 
     @Test
     public void postTest() throws Exception {
-        String app = "abdc623d-c3e3-a908-05d5-a5e0cfca62d3";
+        String app = "abc";
         JSONObject json = new JSONObject();
         json.put("app", app);
         json.put("eventId", "123");

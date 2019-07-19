@@ -65,7 +65,7 @@ public class FlowStartChecker extends ArrayList<FlowStartChecker.FlowStartCheckE
             for (FlowStartCheckEvent ce : this) {
                 if (ce.shouldCheck(lastCheckTime, currentCheckTime)) {
                     try {
-                        boolean started = AzkabanMetaUtil.hasFlowStarted(bds.getConnection(), ce.getProject(), ce.getProject());
+                        boolean started = AzkabanMetaUtil.hasFlowStarted(bds.getConnection(), ce.getProject(), ce.getFlow());
                         LOG.debug(String.format("FlowStartChecker run time range [%s, %s], event %s, run=%b",
                                 lastCheckTime, currentCheckTime, ce.toString(), started));
                         if (!started) {
@@ -81,11 +81,10 @@ public class FlowStartChecker extends ArrayList<FlowStartChecker.FlowStartCheckE
                             LOG.info(String.format("Offer event to dispacher succ: %s", se));
                         }
                     } catch (InterruptedException e) {
-                        LOG.warn("FlowStartChecker interrupted.");
-                        e.printStackTrace();
+                        LOG.warn("FlowStartChecker interrupted.", e);
                         Thread.currentThread().interrupt();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOG.warn(null, e);
                     }
                 }
             }
@@ -93,8 +92,7 @@ public class FlowStartChecker extends ArrayList<FlowStartChecker.FlowStartCheckE
             try {
                 TimeUnit.MILLISECONDS.sleep(interval);
             } catch (InterruptedException e) {
-                LOG.warn("FlowStartChecker interrupted.");
-                e.printStackTrace();
+                LOG.warn("FlowStartChecker interrupted.", e);
                 Thread.currentThread().interrupt();
             }
         }

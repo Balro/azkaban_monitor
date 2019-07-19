@@ -5,11 +5,14 @@ import balro.monitor.azkaban.heartbeater.HeartBeater;
 import balro.monitor.azkaban.conf.ConfConst;
 import balro.monitor.azkaban.dispatcher.Dispacher;
 import balro.monitor.azkaban.sender.OnealertSender;
+import balro.monitor.azkaban.util.ZKUtil;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.tree.ConfigurationNode;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
+import org.apache.zookeeper.ZooKeeper;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,15 +50,19 @@ public class AzkabanMonitor {
         try {
             conf = new XMLConfiguration();
             conf.setDelimiterParsingDisabled(true);
-            conf.load("azkaban-monitor.xml");
+            try {
+                conf.load("azkaban-monitor.xml");
+            } catch (ConfigurationException ce) {
+                LOG.warn(null, ce);
+                conf.load("/etc/azkaban-monitor/azkaban-monitor.xml");
+            }
             startDispacher();
             startSender();
             startChecker();
             startHeartBeat();
             LOG.info("Azkaban monitor started.");
         } catch (Exception e) {
-            e.printStackTrace();
-            LOG.error("Azkaban monitor start failed.");
+            LOG.error("Azkaban monitor start failed.", e);
             stop();
         }
     }
@@ -133,7 +140,7 @@ public class AzkabanMonitor {
                 senders.shutdownNow();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.warn(null, e);
         }
         LOG.info("Azkaban monitor stopped.");
     }
@@ -142,7 +149,7 @@ public class AzkabanMonitor {
         try {
             conf = new XMLConfiguration("azkaban-monitor.xml");
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.warn(null, e);
         }
         HeartBeater.status(conf.getString(ConfConst.ZOO_QUORUM, ConfConst.ZOO_QUORUM_DEF)
                 , 5000

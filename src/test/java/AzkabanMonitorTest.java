@@ -19,6 +19,6 @@ public class AzkabanMonitorTest {
     }
 
     public static void main(String[] args) {
-        AzkabanMonitor.main(new String[]{"start"});
+        AzkabanMonitor.main(new String[]{"status"});
     }
 }

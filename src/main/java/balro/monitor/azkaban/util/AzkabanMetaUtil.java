@@ -74,6 +74,7 @@ public class AzkabanMetaUtil {
         ps.setString(2, project);
         ps.setString(3, flow);
         ps.setString(4, job);
+        LOG.debug("JobStartCheck sql: " + ps.toString().substring(ps.toString().lastIndexOf(":") + 1).trim());
         return haveData(ps, conn);
     }
 
@@ -88,6 +89,7 @@ public class AzkabanMetaUtil {
         ps.setString(2, project);
         ps.setString(3, flow);
         ps.setString(4, job);
+        LOG.debug("JobEndCheck sql: " + ps.toString().substring(ps.toString().lastIndexOf(":") + 1).trim());
         return haveData(ps, conn);
     }
 
@@ -101,6 +103,7 @@ public class AzkabanMetaUtil {
         ps.setLong(1, midnight());
         ps.setString(2, project);
         ps.setString(3, flow);
+        LOG.debug("FlowStartCheck sql: " + ps.toString().substring(ps.toString().lastIndexOf(":") + 1).trim());
         return haveData(ps, conn);
     }
 
@@ -114,6 +117,7 @@ public class AzkabanMetaUtil {
         ps.setLong(1, midnight());
         ps.setString(2, project);
         ps.setString(3, flow);
+        LOG.debug("FlowEndCheck sql: " + ps.toString().substring(ps.toString().lastIndexOf(":") + 1).trim());
         return haveData(ps, conn);
     }
 

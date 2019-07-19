@@ -65,7 +65,7 @@ public class JobStartChecker extends ArrayList<JobStartChecker.JobStartCheckEven
             for (JobStartCheckEvent ce : this) {
                 if (ce.shouldCheck(lastCheckTime, currentCheckTime)) {
                     try {
-                        boolean started = AzkabanMetaUtil.hasJobStarted(bds.getConnection(), ce.getProject(), ce.getProject(), ce.getJob());
+                        boolean started = AzkabanMetaUtil.hasJobStarted(bds.getConnection(), ce.getProject(), ce.getFlow(), ce.getJob());
                         LOG.debug(String.format("JobStartChecker run time range [%s, %s], event %s, run=%b",
                                 lastCheckTime, currentCheckTime, ce.toString(), started));
                         if (!started) {
@@ -82,11 +82,10 @@ public class JobStartChecker extends ArrayList<JobStartChecker.JobStartCheckEven
                             LOG.info(String.format("Offer event to dispacher succ: %s", se));
                         }
                     } catch (InterruptedException e) {
-                        LOG.warn("JobStartChecker interrupted.");
-                        e.printStackTrace();
+                        LOG.warn("JobStartChecker interrupted.", e);
                         Thread.currentThread().interrupt();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOG.warn(null, e);
                     }
                 }
             }
@@ -94,8 +93,7 @@ public class JobStartChecker extends ArrayList<JobStartChecker.JobStartCheckEven
             try {
                 TimeUnit.MILLISECONDS.sleep(interval);
             } catch (InterruptedException e) {
-                LOG.warn("JobStartChecker interrupted.");
-                e.printStackTrace();
+                LOG.warn("JobStartChecker interrupted.", e);
                 Thread.currentThread().interrupt();
             }
         }

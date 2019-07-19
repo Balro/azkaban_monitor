@@ -85,11 +85,10 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.JobStatusCheckE
                             LOG.info(String.format("Offer event to dispacher succ: %s", se));
                         }
                     } catch (InterruptedException e) {
-                        LOG.warn("JobStatusChecker interrupted.");
-                        e.printStackTrace();
+                        LOG.warn("JobStatusChecker interrupted.", e);
                         Thread.currentThread().interrupt();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOG.warn(null, e);
                     }
                 }
             }
@@ -97,8 +96,7 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.JobStatusCheckE
             try {
                 TimeUnit.MILLISECONDS.sleep(interval);
             } catch (InterruptedException e) {
-                LOG.warn("JobStatusChecker interrupted.");
-                e.printStackTrace();
+                LOG.warn("JobStatusChecker interrupted.", e);
                 Thread.currentThread().interrupt();
             }
         }

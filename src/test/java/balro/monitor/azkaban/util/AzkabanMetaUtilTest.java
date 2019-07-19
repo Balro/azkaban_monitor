@@ -52,8 +52,8 @@ public class AzkabanMetaUtilTest {
 
     @Test
     public void hasJobEndedTest() throws Exception {
-        System.out.println(AzkabanMetaUtil.hasJobEnded(CONN, "test", "ttt", "321"));
-//        System.out.println(AzkabanMetaUtil.hasJobEnded(CONN, "test", "ttt", "123"));
+//        System.out.println(AzkabanMetaUtil.hasJobEnded(CONN, "test", "ttt", "321"));
+        System.out.println(AzkabanMetaUtil.hasJobEnded(CONN, "test", "ttt", "123"));
     }
 
     @Test

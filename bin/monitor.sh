@@ -2,45 +2,49 @@
 . /etc/profile
 . ~/.bash_profile
 
-HOME=`dirname $0`
-HOME=`cd -P $HOME/../;pwd`
+MONITOR_HOME=`dirname $0`
+MONITOR_HOME=`cd -P $MONITOR_HOME/../;pwd`
 
 # log dir
-export LOG_DIR=$HOME/logs
+export LOG_DIR=$MONITOR_HOME/logs
+mkdir -p $LOG_DIR
 
 # jvm opts
 MONITOR_OPTS="-Xmx256m"
 
-zkcli="/opt/cloudera/parcels/CDH/lib/zookeeper/bin/zkCli.sh -server bigdata01:2181"
-
 # classpath
 CLASSPATH=
-for f in $(find $HOME/lib -type f); do
+for f in $(find $MONITOR_HOME/lib -type f); do
   if [ "$CLASSPATH" ]; then
     CLASSPATH=$CLASSPATH:$f
   else
     CLASSPATH=$f
   fi
 done
-CLASSPATH=$CLASSPATH:$HOME/lib
-CLASSPATH=$CLASSPATH:$HOME/conf
+CLASSPATH=$CLASSPATH:$MONITOR_HOME/lib
+CLASSPATH=$CLASSPATH:$MONITOR_HOME/conf
+
+MAIN_CLASS=balro.monitor.azkaban.AzkabanMonitor
 
 start() {
-  is_run=`$zkcli get /baluo/monitor/azkb/heartbeat 2>&1 | grep "Node does not exist" | wc -l`
-  if [ $is_run -eq 0 ]; then
-    echo "AzkbMonitor is running!"
-    status
-    exit 1
+  status_res=`status 2>&1`
+  if [ "$status_res" == "Azkaban-monitor is down." ]; then
+    nohup java $MONITOR_OPTS -cp $CLASSPATH $MAIN_CLASS start >> $LOG_DIR/start.out 2>&1 &
+    sleep 5s
+  else
+    echo "Azkaban-monitor is running."
   fi
-  nohup java $MONITOR_OPTS -cp $CLASSPATH baluo.monitor.azkaban.AzkabanBMonitor >> $LOG_DIR/start.out 2>&1 &
+  status
 }
 
 stop() {
-  ps -ef | grep demo.baluo.monitor.app.AZKBMonitor | grep -v grep | awk '{print $2}' | xargs kill -15
+  ps -ef | grep $MAIN_CLASS | grep -v grep | awk '{print $2}' | xargs kill -15
+  sleep 5s
+  status
 }
 
 status() {
- $zkcli get /baluo/monitor/azkb/heartbeat 2>&1 | grep -A 5 "WatchedEvent state"
+  java -cp $CLASSPATH $MAIN_CLASS status
 }
 
 USAGE="$0 <start|stop|status>"
@@ -55,10 +59,6 @@ case $1 in
   status)
     status
   ;;
-  restart)
-    stop
-    start
-   ;;
   *)
     echo "$USAGE"
   ;;

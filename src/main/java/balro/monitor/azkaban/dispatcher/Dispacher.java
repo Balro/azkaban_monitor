@@ -56,8 +56,7 @@ public class Dispacher extends Thread {
                     }
                 }
             } catch (InterruptedException ie) {
-                LOG.warn("Dispacher interrupted.");
-                ie.printStackTrace();
+                LOG.warn("Dispacher interrupted.", ie);
                 interrupt();
             }
         }

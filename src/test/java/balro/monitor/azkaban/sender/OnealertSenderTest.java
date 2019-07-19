@@ -12,11 +12,10 @@ public class OnealertSenderTest {
         OnealertSender.setLog(Logger.getLogger("test"));
     }
 
-    private String testApp = "abdc623d-c3e3-a908-05d5-a5e0cfca62d3";
 
     @Test
     public void sendTest() throws Exception {
-        OnealertSender os = new OnealertSender("test", testApp, 10000, null, null);
+        OnealertSender os = new OnealertSender("test", "abc", 10000, null, null);
         new Thread(os).start();
         TimeUnit.SECONDS.sleep(5);
         SenderEvent se = new SenderEvent();

@@ -65,7 +65,7 @@ public class JobEndChecker extends ArrayList<JobEndChecker.JobEndCheckEvent> imp
             for (JobEndCheckEvent ce : this) {
                 if (ce.shouldCheck(lastCheckTime, currentCheckTime)) {
                     try {
-                        boolean ended = AzkabanMetaUtil.hasJobEnded(bds.getConnection(), ce.getProject(), ce.getProject(), ce.getJob());
+                        boolean ended = AzkabanMetaUtil.hasJobEnded(bds.getConnection(), ce.getProject(), ce.getFlow(), ce.getJob());
                         LOG.debug(String.format("JobEndChecker run time range [%s, %s], event %s, run=%b",
                                 lastCheckTime, currentCheckTime, ce.toString(), ended));
                         if (!ended) {
@@ -82,11 +82,10 @@ public class JobEndChecker extends ArrayList<JobEndChecker.JobEndCheckEvent> imp
                             LOG.info(String.format("Offer event to dispacher succ: %s", se));
                         }
                     } catch (InterruptedException e) {
-                        LOG.warn("JobEndChecker interrupted.");
-                        e.printStackTrace();
+                        LOG.warn("JobEndChecker interrupted.", e);
                         Thread.currentThread().interrupt();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOG.warn(null, e);
                     }
                 }
             }
@@ -94,8 +93,7 @@ public class JobEndChecker extends ArrayList<JobEndChecker.JobEndCheckEvent> imp
             try {
                 TimeUnit.MILLISECONDS.sleep(interval);
             } catch (InterruptedException e) {
-                LOG.warn("JobStopChecker interrupted.");
-                e.printStackTrace();
+                LOG.warn("JobStopChecker interrupted.", e);
                 Thread.currentThread().interrupt();
             }
         }

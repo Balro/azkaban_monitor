@@ -44,7 +44,7 @@ public class HeartBeater implements Runnable {
                         try {
                             ZKUtil.delete(zoo, node);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            LOG.warn(null, e);
                         }
                     }
                 })
@@ -59,22 +59,22 @@ public class HeartBeater implements Runnable {
                 try {
                     ZKUtil.set(zoo, node, data);
                 } catch (KeeperException ke) {
-                    ke.printStackTrace();
+                    LOG.warn(null, ke);
                 }
                 LOG.debug(String.format("Boom %s.", data));
                 TimeUnit.MILLISECONDS.sleep(interval);
             }
         } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            LOG.error(null, ie);
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(null, e);
         }
         AzkabanMonitor.stop();
         try {
             zoo.close();
         } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            LOG.warn(null, ie);
             Thread.currentThread().interrupt();
         }
         LOG.fatal("We just lost the heart!");
@@ -85,9 +85,10 @@ public class HeartBeater implements Runnable {
         try {
             zoo = new ZooKeeper(quorum, timeout, ZKUtil.EMPTY_WATCHER);
             System.out.println(ZKUtil.get(zoo, node));
+        } catch (KeeperException.NoNodeException nne) {
+            System.err.println("Azkaban-monitor is down.");
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Get status failed.");
         } finally {
             if (zoo != null)
                 try {
