@@ -48,14 +48,7 @@ public class AzkabanMonitor {
     private static void start() {
         LOG.info("Azkaban monitor starting.");
         try {
-            conf = new XMLConfiguration();
-            conf.setDelimiterParsingDisabled(true);
-            try {
-                conf.load("azkaban-monitor.xml");
-            } catch (ConfigurationException ce) {
-                LOG.warn(null, ce);
-                conf.load("/etc/azkaban-monitor/azkaban-monitor.xml");
-            }
+            loadConf();
             startDispacher();
             startSender();
             startChecker();
@@ -64,6 +57,17 @@ public class AzkabanMonitor {
         } catch (Exception e) {
             LOG.error("Azkaban monitor start failed.", e);
             stop();
+        }
+    }
+
+    private static void loadConf() throws Exception {
+        conf = new XMLConfiguration();
+        conf.setDelimiterParsingDisabled(true);
+        try {
+            conf.load("azkaban-monitor.xml");
+        } catch (ConfigurationException ce) {
+            LOG.warn(null, ce);
+            conf.load("/etc/azkaban-monitor/azkaban-monitor.xml");
         }
     }
 
@@ -147,12 +151,12 @@ public class AzkabanMonitor {
 
     private static void status() {
         try {
-            conf = new XMLConfiguration("azkaban-monitor.xml");
+            loadConf();
+            HeartBeater.status(conf.getString(ConfConst.ZOO_QUORUM, ConfConst.ZOO_QUORUM_DEF)
+                    , 5000
+                    , conf.getString(ConfConst.ZOO_NODE, ConfConst.ZOO_NODE_DEF));
         } catch (Exception e) {
-            LOG.warn(null, e);
+            e.printStackTrace();
         }
-        HeartBeater.status(conf.getString(ConfConst.ZOO_QUORUM, ConfConst.ZOO_QUORUM_DEF)
-                , 5000
-                , conf.getString(ConfConst.ZOO_NODE, ConfConst.ZOO_NODE_DEF));
     }
 }

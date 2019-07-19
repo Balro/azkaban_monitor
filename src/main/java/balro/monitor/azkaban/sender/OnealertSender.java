@@ -30,7 +30,7 @@ public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements 
         this.interval = interval;
         initTime(this.week, week);
         initTime(this.hour, hour);
-        LOG.info(String.format("OneralertSender %s initialized, week=%s, hour=%s.", app, this.week.toString(), this.hour.toString()));
+        LOG.info(String.format("OneralertSender %s/%s initialized, week=%s, hour=%s.", this.name, app, this.week.toString(), this.hour.toString()));
     }
 
     private void initTime(ArrayList<Integer> time, String timeStr) {

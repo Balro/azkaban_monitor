@@ -30,7 +30,7 @@ start() {
   status_res=`status 2>&1`
   if [ "$status_res" == "Azkaban-monitor is down." ]; then
     nohup java $MONITOR_OPTS -cp $CLASSPATH $MAIN_CLASS start >> $LOG_DIR/start.out 2>&1 &
-    sleep 5s
+    sleep 3s
   else
     echo "Azkaban-monitor is running."
   fi
@@ -39,7 +39,7 @@ start() {
 
 stop() {
   ps -ef | grep $MAIN_CLASS | grep -v grep | awk '{print $2}' | xargs kill -15
-  sleep 5s
+  sleep 3s
   status
 }
 
