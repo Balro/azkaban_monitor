@@ -46,12 +46,14 @@ public class AzkabanMetaUtilTest {
 
     @Test
     public void hasJobStartedTest() throws Exception {
-        System.out.println(AzkabanMetaUtil.hasJobStarted(CONN, "test", "hdw_user_product_order", "hdw_user_product_order"));
+//        System.out.println(AzkabanMetaUtil.hasJobStarted(CONN, "test", "ttt", "321"));
+        System.out.println(AzkabanMetaUtil.hasJobStarted(CONN, "test", "ttt", "123"));
     }
 
     @Test
     public void hasJobEndedTest() throws Exception {
-        System.out.println(AzkabanMetaUtil.hasJobEnded(CONN, "test", "hdw_user_product_order", "hdw_user_product_order"));
+        System.out.println(AzkabanMetaUtil.hasJobEnded(CONN, "test", "ttt", "321"));
+//        System.out.println(AzkabanMetaUtil.hasJobEnded(CONN, "test", "ttt", "123"));
     }
 
     @Test

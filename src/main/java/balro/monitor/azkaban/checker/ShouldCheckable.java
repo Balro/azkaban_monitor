@@ -1,5 +1,5 @@
 package balro.monitor.azkaban.checker;
 
 public interface ShouldCheckable {
-    boolean shouldCheck();
+    boolean shouldCheck(long start, long end);
 }

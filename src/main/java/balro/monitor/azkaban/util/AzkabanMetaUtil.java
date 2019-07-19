@@ -4,12 +4,10 @@ import balro.monitor.azkaban.sender.SenderEvent;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -76,7 +74,7 @@ public class AzkabanMetaUtil {
         ps.setString(2, project);
         ps.setString(3, flow);
         ps.setString(4, job);
-        return hasNext(ps, conn);
+        return haveData(ps, conn);
     }
 
     public static boolean hasJobEnded(Connection conn, String project, String flow, String job) throws Exception {
@@ -90,7 +88,7 @@ public class AzkabanMetaUtil {
         ps.setString(2, project);
         ps.setString(3, flow);
         ps.setString(4, job);
-        return hasNext(ps, conn);
+        return haveData(ps, conn);
     }
 
     public static boolean hasFlowStarted(Connection conn, String project, String flow) throws Exception {
@@ -103,7 +101,7 @@ public class AzkabanMetaUtil {
         ps.setLong(1, midnight());
         ps.setString(2, project);
         ps.setString(3, flow);
-        return hasNext(ps, conn);
+        return haveData(ps, conn);
     }
 
     public static boolean hasFlowEnded(Connection conn, String project, String flow) throws Exception {
@@ -116,10 +114,10 @@ public class AzkabanMetaUtil {
         ps.setLong(1, midnight());
         ps.setString(2, project);
         ps.setString(3, flow);
-        return hasNext(ps, conn);
+        return haveData(ps, conn);
     }
 
-    private static boolean hasNext(PreparedStatement ps, Connection conn) throws Exception {
+    private static boolean haveData(PreparedStatement ps, Connection conn) throws Exception {
         boolean has = ps.executeQuery().next();
         ps.close();
         conn.close();
@@ -128,79 +126,6 @@ public class AzkabanMetaUtil {
 
     private static long midnight() {
         long s = System.currentTimeMillis();
-        return s - s % 86400000L - tzOffset;
+        return s - (s + tzOffset) % 86400000L;
     }
-
-//    public static class Entry {
-//        private String exec_id;
-//        private String projnect_name;
-//        private String flow_id;
-//        private String job_id;
-//        private int attempt;
-//        private long start_time;
-//        private long end_time;
-//
-//        public String getExec_id() {
-//            return exec_id;
-//        }
-//
-//        private Entry setExec_id(String exec_id) {
-//            this.exec_id = exec_id;
-//            return this;
-//        }
-//
-//        public String getProjnect_name() {
-//            return projnect_name;
-//        }
-//
-//        private Entry setProjnect_name(String projnect_name) {
-//            this.projnect_name = projnect_name;
-//            return this;
-//        }
-//
-//        public String getFlow_id() {
-//            return flow_id;
-//        }
-//
-//        private Entry setFlow_id(String flow_id) {
-//            this.flow_id = flow_id;
-//            return this;
-//        }
-//
-//        public String getJob_id() {
-//            return job_id;
-//        }
-//
-//        private Entry setJob_id(String job_id) {
-//            this.job_id = job_id;
-//            return this;
-//        }
-//
-//        public int getAttempt() {
-//            return attempt;
-//        }
-//
-//        private Entry setAttempt(int attempt) {
-//            this.attempt = attempt;
-//            return this;
-//        }
-//
-//        public long getStart_time() {
-//            return start_time;
-//        }
-//
-//        private Entry setStart_time(long start_time) {
-//            this.start_time = start_time;
-//            return this;
-//        }
-//
-//        public long getEnd_time() {
-//            return end_time;
-//        }
-//
-//        private Entry setEnd_time(long end_time) {
-//            this.end_time = end_time;
-//            return this;
-//        }
-//    }
 }

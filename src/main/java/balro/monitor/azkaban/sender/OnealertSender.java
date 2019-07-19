@@ -58,8 +58,8 @@ public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements 
                 SenderEvent se;
                 while ((se = this.poll(interval, TimeUnit.MILLISECONDS)) != null) {
                     if (shouldSend()) {
-                        send(se, 2);
                         LOG.info(String.format("%s/%s found Event %s and send.", name, app, se));
+                        send(se, 2);
                     } else {
                         LOG.debug(String.format("%s/%s found Event %s but not in sendtime.", name, app, se));
                     }
@@ -99,9 +99,9 @@ public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements 
     private void send(SenderEvent se, int retry) {
         JSONObject data = new JSONObject();
         data.put("app", app);
-        data.put("eventId", String.format("%s/%s/%s/%s/%s", se.getExecId(), se.getProject(), se.getFlow(), se.getJob(), se.getAttempt()));
+        data.put("eventId", String.format("%s/%s/%s/%s/%s/%s", se.getType(), se.getExecId(), se.getProject(), se.getFlow(), se.getJob(), se.getAttempt()));
         data.put("eventType", "trigger");
-        data.put("alarmName", String.format("%s/%s/%s/%s/%s", se.getExecId(), se.getProject(), se.getFlow(), se.getJob(), se.getAttempt()));
+        data.put("alarmName", String.format("%s/%s/%s/%s/%s/%s", se.getType(), se.getExecId(), se.getProject(), se.getFlow(), se.getJob(), se.getAttempt()));
         data.put("priority", 1);
         data.put("alarmContent", se.getMsg());
 

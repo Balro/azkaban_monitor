@@ -78,6 +78,20 @@
             <job>hdw_user_new_active</job>
             <endtime>03:00</endtime>
         </hdw_user_new_active>
+        <job1>
+            <project>test</project>
+            <flow>ttt</flow>
+            <job>321</job>
+            <starttime>15:20</starttime>
+            <endtime>15:20</endtime>
+        </job1>
+        <job2>
+            <project>test</project>
+            <flow>ttt</flow>
+            <job>123</job>
+            <starttime>15:20</starttime>
+            <endtime>15:20</endtime>
+        </job2>
     </conditions>
     <senders>
         <qinghe>

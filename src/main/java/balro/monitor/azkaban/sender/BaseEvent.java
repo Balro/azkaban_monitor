@@ -10,6 +10,7 @@ public abstract class BaseEvent {
     private long startTime;
     private long endTime;
 
+
     public String getProject() {
         return project;
     }
@@ -55,6 +56,16 @@ public abstract class BaseEvent {
         return this;
     }
 
+
+    public String getSender() {
+        return sender;
+    }
+
+    public BaseEvent setSender(String sender) {
+        this.sender = sender;
+        return this;
+    }
+
     public long getStartTime() {
         return startTime;
     }
@@ -73,13 +84,8 @@ public abstract class BaseEvent {
         return this;
     }
 
-    public String getSender() {
-        return sender;
-    }
-
-    public BaseEvent setSender(String sender) {
-        this.sender = sender;
-        return this;
+    public enum Type {
+        JOBSTATUS, JOBSTART, JOBEND, FLOWSTART, FLOWEND
     }
 
 }

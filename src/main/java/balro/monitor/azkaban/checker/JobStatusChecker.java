@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> implements Runnable {
+public class JobStatusChecker extends ArrayList<JobStatusChecker.JobStatusCheckEvent> implements Runnable {
     private static Logger LOG = Logger.getLogger(JobStatusChecker.class);
 
     private LinkedBlockingQueue<SenderEvent> queue;
@@ -39,7 +39,7 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> 
         for (ConfigurationNode check : cNode.getChildren()) {
             String status = conf.getString(check.getName() + ".status");
             if (status == null) continue;
-            this.add(new CheckEventImp(conf.getString(check.getName() + ".project", "%")
+            this.add(new JobStatusCheckEvent(conf.getString(check.getName() + ".project", "%")
                     , conf.getString(check.getName() + ".flow", "%")
                     , conf.getString(check.getName() + ".job", "%")
                     , status
@@ -48,7 +48,7 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> 
         }
         StringBuilder sb = new StringBuilder();
         sb.append("JobStatusChecker initialized ").append(this.size()).append(" checkEvents : [");
-        for (CheckEventImp ce : this) {
+        for (JobStatusCheckEvent ce : this) {
             sb.append(ce.toString()).append(",");
         }
         sb.append("]");
@@ -61,8 +61,8 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> 
         long currentCheckTime;
         while (!Thread.interrupted()) {
             currentCheckTime = System.currentTimeMillis();
-            for (CheckEventImp ce : this) {
-                if (ce.shouldCheck()) {
+            for (JobStatusCheckEvent ce : this) {
+                if (ce.shouldCheck(lastCheckTime, currentCheckTime)) {
                     try {
                         List<SenderEvent> list = AzkabanMetaUtil.checkJobStatus(bds.getConnection()
                                 , lastCheckTime
@@ -72,9 +72,10 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> 
                                 , ce.getProject()
                                 , ce.getFlow()
                                 , ce.getJob());
-                        LOG.debug(String.format("JobStatusChecker run time range [%s, %s], found %d events.",
-                                lastCheckTime, currentCheckTime, list.size()));
+                        LOG.debug(String.format("JobStatusChecker run time range [%s, %s] on event %s, found %d events.",
+                                lastCheckTime, currentCheckTime, ce.toString(), list.size()));
                         for (SenderEvent se : list) {
+                            se.setType(SenderEvent.Type.JOBSTATUS);
                             se.setMsg(String.format("Job in status, execId=%d, project=%s, flow=%s, job=%s, attempt=%d, status=%s, start=%s, end=%s."
                                     , se.getExecId(), se.getProject(), se.getFlow(), se.getJob(), se.getAttempt(), se.getStatus()
                                     , new Date(se.getStartTime()), new Date(se.getEndTime())));
@@ -83,7 +84,6 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> 
                             }
                             LOG.info(String.format("Offer event to dispacher succ: %s", se));
                         }
-                        TimeUnit.MILLISECONDS.sleep(interval);
                     } catch (InterruptedException e) {
                         LOG.warn("JobStatusChecker interrupted.");
                         e.printStackTrace();
@@ -94,13 +94,20 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> 
                 }
             }
             lastCheckTime = currentCheckTime;
+            try {
+                TimeUnit.MILLISECONDS.sleep(interval);
+            } catch (InterruptedException e) {
+                LOG.warn("JobStatusChecker interrupted.");
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
         }
         LOG.info("JobStatusChecker stopped.");
     }
 
-    protected class CheckEventImp extends BaseEvent implements ShouldCheckable {
+    protected class JobStatusCheckEvent extends BaseEvent implements ShouldCheckable {
 
-        private CheckEventImp(String project, String flow, String job, String status, int attempt, String sender) {
+        private JobStatusCheckEvent(String project, String flow, String job, String status, int attempt, String sender) {
             setProject(project);
             setFlow(flow);
             setJob(job);
@@ -110,7 +117,7 @@ public class JobStatusChecker extends ArrayList<JobStatusChecker.CheckEventImp> 
         }
 
         @Override
-        public boolean shouldCheck() {
+        public boolean shouldCheck(long start, long end) {
             return true;
         }
 
