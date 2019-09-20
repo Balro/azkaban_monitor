@@ -9,8 +9,8 @@ import java.util.Calendar;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements Runnable {
-    private static Logger LOG = Logger.getLogger(OnealertSender.class);
+public class OneAlertSender extends LinkedBlockingQueue<SenderEvent> implements Runnable {
+    private static Logger LOG = Logger.getLogger(OneAlertSender.class);
     private static String url = "http://api.aiops.com/alert/api/event";
     private String app;
     private String name;
@@ -23,7 +23,7 @@ public class OnealertSender extends LinkedBlockingQueue<SenderEvent> implements 
         LOG = log;
     }
 
-    public OnealertSender(String name, String app, int interval, String week, String hour) {
+    public OneAlertSender(String name, String app, int interval, String week, String hour) {
         super(1000);
         this.name = name;
         this.app = app;

@@ -1,21 +1,21 @@
 <configuration>
     <zookeeper>
-        <quorum>test01:2181</quorum>
-        <node>/monitor</node>
-        <timeout>90000</timeout>
+        <quorum>test01:2181</quorum>  <!-- zookeeper的节点地址。 -->
+        <node>/monitor</node>  <!-- 使用zookeeper的节点目录。 -->
+        <timeout>90000</timeout>  <!-- 连接zookeeper的超时时间。 -->
     </zookeeper>
     <monitor>
         <heartbeat>
-            <interval>30000</interval>
+            <interval>30000</interval>  <!-- # 心跳上报间隔。同时也是每次进行状态检查的间隔。 -->
         </heartbeat>
     </monitor>
     <database>
-        <driver>com.mysql.jdbc.Driver</driver>
-        <url>jdbc:mysql://test03:3306/azkaban</url>
+        <driver>com.mysql.jdbc.Driver</driver>  <!-- azkaban元数据库driver，默认为mysql。 -->
+        <url>jdbc:mysql://test03:3306/azkaban</url>  <!-- 元数据jdbc地址。 -->
         <user>azkaban</user>
         <password>azkaban</password>
     </database>
-    <conditions>
+    <conditions>  <!-- 可配置多个条件，每个条件都会进行一次检查。 -->
         <!--
         <template>
             # project，flow，job底层由mysql查询like关键字实现。
@@ -47,31 +47,31 @@
             <sender/>
         </template>
         -->
-        <allfailed>
+        <allfailed>  <!-- 检查所有失败状态的job。 -->
             <project>%</project>
             <flow>%</flow>
             <job>%</job>
             <status>70,80</status>
             <attempt>1</attempt>
         </allfailed>
-        <job1>
+        <flow1>  <!-- 检查 test项目 的 ttt流 是否在 17:30 启动，是否在 18:30 停止。 -->
             <project>test</project>
             <flow>ttt</flow>
-            <starttime>17:28</starttime>
-            <endtime>17:28</endtime>
-        </job1>
-        <job2>
+            <starttime>17:30</starttime>
+            <endtime>18:30</endtime>
+        </flow1>
+        <job2> <!-- 检查 test项目 tt2流 的 -->
             <project>test</project>
             <flow>tt2</flow>
             <starttime>17:28</starttime>
             <endtime>17:28</endtime>
         </job2>
     </conditions>
-    <senders>
-        <sa>
-            <app>ccc</app>
-            <week>2,4,6,7</week>
-            <hour>0-6</hour>
+    <senders>  <!-- 可配置多个sender，为每个sender配置不同的生效时间来间接实现排班功能。 -->
+        <sa>  <!-- 在每周二、四、六、日的凌晨0点到6点，告警发送至onealert的ccc应用。 -->
+            <app>ccc</app>  <!-- onealert集成应用的 AppKey -->
+            <week>2,4,6,7</week>  <!-- 在每周的周几生效。 -->
+            <hour>0-6</hour>  <!-- 在每天的几点生效。 -->
         </sa>
         <sb>
             <app>cba</app>

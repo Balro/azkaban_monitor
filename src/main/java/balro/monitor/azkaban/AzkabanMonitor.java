@@ -4,15 +4,13 @@ import balro.monitor.azkaban.checker.CheckerEnum;
 import balro.monitor.azkaban.heartbeater.HeartBeater;
 import balro.monitor.azkaban.conf.ConfConst;
 import balro.monitor.azkaban.dispatcher.Dispacher;
-import balro.monitor.azkaban.sender.OnealertSender;
-import balro.monitor.azkaban.util.ZKUtil;
+import balro.monitor.azkaban.sender.OneAlertSender;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.tree.ConfigurationNode;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
-import org.apache.zookeeper.ZooKeeper;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -103,7 +101,7 @@ public class AzkabanMonitor {
         HierarchicalConfiguration senderConf = conf.configurationAt(ConfConst.SENDERS);
         ConfigurationNode node = senderConf.getRootNode();
         for (ConfigurationNode child : node.getChildren()) {
-            OnealertSender sender = new OnealertSender(child.getName()
+            OneAlertSender sender = new OneAlertSender(child.getName()
                     , (String) child.getChildren("app").get(0).getValue()
                     , (int) conf.getLong(ConfConst.MONITOR_HEART_BEAT_INTERVAL_MILLI, ConfConst.MONITOR_HEART_BEAT_INTERVAL_MILLI_DEF)
                     , (String) child.getChildren("week").get(0).getValue()
