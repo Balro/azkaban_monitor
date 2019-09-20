@@ -1,5 +1,5 @@
-import balro.monitor.azkaban.AzkabanMonitor;
-import balro.monitor.azkaban.util.ZKUtil;
+import monitor.azkaban.AzkabanMonitor;
+import monitor.azkaban.util.ZKUtil;
 import org.apache.zookeeper.ZooKeeper;
 import org.junit.Test;
 
