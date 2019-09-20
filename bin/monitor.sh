@@ -4,6 +4,7 @@
 
 MONITOR_HOME=`dirname $0`
 MONITOR_HOME=`cd -P $MONITOR_HOME/../;pwd`
+cd $MONITOR_HOME
 
 # log dir
 export LOG_DIR=$MONITOR_HOME/logs
@@ -24,7 +25,7 @@ done
 CLASSPATH=$CLASSPATH:$MONITOR_HOME/lib
 CLASSPATH=$CLASSPATH:$MONITOR_HOME/conf
 
-MAIN_CLASS=balro.monitor.azkaban.AzkabanMonitor
+MAIN_CLASS=monitor.azkaban.AzkabanMonitor
 
 start() {
   status_res=`status 2>&1`
