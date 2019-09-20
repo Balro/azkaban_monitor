@@ -18,7 +18,7 @@
             <outputDirectory>conf</outputDirectory>
         </file>
         <file>
-            <source>src/main/resources/monitor.properties</source>
+            <source>src/main/resources/azkaban-monitor.xml</source>
             <outputDirectory>conf</outputDirectory>
         </file>
     </files>

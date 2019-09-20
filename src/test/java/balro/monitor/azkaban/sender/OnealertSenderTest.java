@@ -13,7 +13,7 @@ public class OnealertSenderTest {
     }
 
 
-    @Test
+//    @Test
     public void sendTest() throws Exception {
         OnealertSender os = new OnealertSender("test", "abc", 10000, null, null);
         new Thread(os).start();
