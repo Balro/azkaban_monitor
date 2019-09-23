@@ -18,7 +18,7 @@ azkaban 监控小程序。
 可配置多个sender，并为每个sender配置生效时间。
 
 ## 架构图
-![arch](./docs/images/architecture.jpg)
+![arch](./docs/images/azkaban-monitor.png)
 
 ## 使用
 1. 编译
